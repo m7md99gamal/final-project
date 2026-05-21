@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle" data-ar="Al-Osta - سوق الحرف اليدوية المصرية" data-en="Al-Osta - Egyptian Crafts Marketplace">Al-Osta - سوق الحرف اليدوية المصرية</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h1 class="logo">🛠️ Al-Osta</h1>
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active" data-ar="الرئيسية" data-en="Home">الرئيسية</a>
+                <a href="#search" class="nav-link" data-ar="البحث" data-en="Search">البحث</a>
+                <a href="#dashboard" class="nav-link" data-ar="لوحة التحكم" data-en="Dashboard">لوحة التحكم</a>
+                <a href="#about" class="nav-link" data-ar="عن الموقع" data-en="About">عن الموقع</a>
+            </div>
+            <div class="nav-auth">
+                <button class="btn btn-outline" id="loginBtn" data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</button>
+                <button class="btn btn-primary" id="registerBtn" data-ar="إنشاء حساب" data-en="Sign Up">إنشاء حساب</button>
+                <div class="language-toggle">
+                    <button class="lang-btn" id="langToggle" type="button" aria-label="Switch language">English</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h2 class="hero-title" data-ar="اكتشف أفضل الحرفيين في مصر" data-en="Discover the Best Craftsmen in Egypt">اكتشف أفضل الحرفيين في مصر</h2>
+            <p class="hero-description" data-ar="منصة Al-Osta تربطك بأفضل الحرفيين الموثوقين في مجالات النجارة، الكهرباء، السباكة، والعديد من الخدمات الأخرى" data-en="Al-Osta platform connects you with trusted craftsmen in carpentry, electrical, plumbing, and many other services">
+                منصة Al-Osta تربطك بأفضل الحرفيين الموثوقين في مجالات النجارة، الكهرباء، السباكة، والعديد من الخدمات الأخرى
+            </p>
+            <div class="hero-actions">
+                <button class="btn btn-primary btn-large" onclick="scrollToSection('search')" data-ar="ابحث عن حرفي" data-en="Find a Craftsman">ابحث عن حرفي</button>
+                <button class="btn btn-secondary btn-large" onclick="openAuthModal('register')" data-ar="انضم كحرفي" data-en="Join as Craftsman">انضم كحرفي</button>
+            </div>
+        </div>
+        <div class="hero-map">
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section" id="search">
+        <div class="container">
+            <h3 class="section-title" data-ar="ابحث عن الخدمات بالقرب منك" data-en="Find Services Near You">ابحث عن الخدمات بالقرب منك</h3>
+            <div class="search-filters">
+                <div class="filter-group">
+                    <label for="category" data-ar="التصنيف" data-en="Category">التصنيف</label>
+                    <select id="category" class="filter-select">
+                        <option value="" data-ar="جميع التصنيفات" data-en="All Categories">جميع التصنيفات</option>
+                        <option value="carpentry" data-ar="النجارة" data-en="Carpentry">النجارة</option>
+                        <option value="electrical" data-ar="الكهرباء" data-en="Electrical">الكهرباء</option>
+                        <option value="plumbing" data-ar="السباكة" data-en="Plumbing">السباكة</option>
+                        <option value="painting" data-ar="الدهانات" data-en="Painting">الدهانات</option>
+                        <option value="cleaning" data-ar="التنظيف" data-en="Cleaning">التنظيف</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="budget" data-ar="الميزانية (جنيه)" data-en="Budget (EGP)">الميزانية (جنيه)</label>
+                    <input type="range" id="budget" min="100" max="5000" value="1000" class="filter-slider">
+                    <span id="budgetValue" data-ar="1000 جنيه" data-en="1000 EGP">1000 جنيه</span>
+                </div>
+                <div class="filter-group">
+                    <label for="rating" data-ar="التقييم الأدنى" data-en="Minimum Rating">التقييم الأدنى</label>
+                    <select id="rating" class="filter-select">
+                        <option value="0" data-ar="جميع التقييمات" data-en="All Ratings">جميع التقييمات</option>
+                        <option value="4" data-ar="4 نجوم فما فوق" data-en="4 stars & up">4 نجوم فما فوق</option>
+                        <option value="4.5" data-ar="4.5 نجوم فما فوق" data-en="4.5 stars & up">4.5 نجوم فما فوق</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="applyFilters" data-ar="تطبيق الفلاتر" data-en="Apply Filters">تطبيق الفلاتر</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Craftsmen -->
+    <section class="featured-craftsmen">
+        <div class="container">
+            <h3 class="section-title" data-ar="أفضل الحرفيين الموصى بهم" data-en="Top Recommended Craftsmen">أفضل الحرفيين الموصى بهم</h3>
+            <div class="craftsmen-grid" id="craftsmenGrid">
+                <!-- Craftsmen cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="container">
+            <h3 class="section-title" data-ar="الخدمات المتاحة" data-en="Available Services">الخدمات المتاحة</h3>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🔨</div>
+                    <h4 class="service-title" data-ar="النجارة" data-en="Carpentry">النجارة</h4>
+                    <p class="service-description" data-ar="تصميم وتنفيذ الأعمال الخشبية بجودة عالية" data-en="Design and implement woodwork with high quality">تصميم وتنفيذ الأعمال الخشبية بجودة عالية</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h4 class="service-title" data-ar="الكهرباء" data-en="Electrical">الكهرباء</h4>
+                    <p class="service-description" data-ar="تركيب وإصلاح الأنظمة الكهربائية" data-en="Installation and repair of electrical systems">تركيب وإصلاح الأنظمة الكهربائية</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🔧</div>
+                    <h4 class="service-title" data-ar="السباكة" data-en="Plumbing">السباكة</h4>
+                    <p class="service-description" data-ar="أعمال السباكة المنزلية والتجارية" data-en="Residential and commercial plumbing work">أعمال السباكة المنزلية والتجارية</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🎨</div>
+                    <h4 class="service-title" data-ar="الدهانات" data-en="Painting">الدهانات</h4>
+                    <p class="service-description" data-ar="تنسيق الألوان وطلاء الجدران" data-en="Color coordination and wall painting">تنسيق الألوان وطلاء الجدران</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h3 class="section-title" data-ar="كيف تعمل المنصة؟" data-en="How It Works">كيف تعمل المنصة؟</h3>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4 class="step-title" data-ar="ابحث عن حرفي" data-en="Find a Craftsman">ابحث عن حرفي</h4>
+                    <p class="step-description" data-ar="استخدم خيارات البحث للعثور على الحرفي المناسب" data-en="Use search options to find the right craftsman">استخدم خيارات البحث للعثور على الحرفي المناسب</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4 class="step-title" data-ar="احجز الخدمة" data-en="Book Service">احجز الخدمة</h4>
+                    <p class="step-description" data-ar="اختر التاريخ والميزانية المناسبة" data-en="Choose the right date and budget">اختر التاريخ والميزانية المناسبة</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4 class="step-title" data-ar="ادفع بأمان" data-en="Pay Securely">ادفع بأمان</h4>
+                    <p class="step-description" data-ar="استخدم FawryPay للدفع الآمن" data-en="Use FawryPay for secure payment">استخدم FawryPay للدفع الآمن</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4 class="step-title" data-ar="قيم الخدمة" data-en="Rate Service">قيم الخدمة</h4>
+                    <p class="step-description" data-ar="شارك تجربتك لمساعدة الآخرين" data-en="Share your experience to help others">شارك تجربتك لمساعدة الآخرين</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auth Modals -->
+    <div class="modal" id="authModal">
+        <div class="modal-content auth-modal-content">
+            <span class="close" id="closeModal" aria-label="Close">&times;</span>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login" data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</button>
+                <button class="auth-tab" data-tab="register" data-ar="إنشاء حساب" data-en="Register">إنشاء حساب</button>
+            </div>
+            
+            <div class="auth-form active" id="loginForm">
+                <h3 class="auth-title" data-ar="تسجيل الدخول إلى حسابك" data-en="Login to Your Account">تسجيل الدخول إلى حسابك</h3>
+                <div class="form-group">
+                    <label for="loginEmail" data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" data-ar-placeholder="example@email.com" data-en-placeholder="example@email.com" placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword" data-ar="كلمة المرور" data-en="Password">كلمة المرور</label>
+                    <input type="password" id="loginPassword" data-ar-placeholder="أدخل كلمة المرور" data-en-placeholder="Enter your password" placeholder="أدخل كلمة المرور">
+                </div>
+                <button class="btn btn-primary btn-full" id="loginSubmitBtn" onclick="handleLogin()" data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</button>
+                <div class="auth-footer">
+                    <p>
+                        <span class="auth-footer-text" data-ar="ليس لديك حساب؟" data-en="Don't have an account?">ليس لديك حساب؟</span>
+                        <a href="#" class="auth-switch" data-target="register" data-ar="سجل الآن" data-en="Sign Up Now">سجل الآن</a>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="auth-form" id="registerForm">
+                <h3 class="auth-title" data-ar="انضم إلى Al-Osta" data-en="Join Al-Osta">انضم إلى Al-Osta</h3>
+                <div class="form-group">
+                    <label for="registerName" data-ar="الاسم بالكامل" data-en="Full Name">الاسم بالكامل</label>
+                    <input type="text" id="registerName" data-ar-placeholder="أدخل اسمك بالكامل" data-en-placeholder="Enter your full name" placeholder="أدخل اسمك بالكامل">
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail" data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</label>
+                    <input type="email" id="registerEmail" data-ar-placeholder="example@email.com" data-en-placeholder="example@email.com" placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone" data-ar="رقم الهاتف" data-en="Phone Number">رقم الهاتف</label>
+                    <input type="tel" id="registerPhone" data-ar-placeholder="01XXXXXXXXX" data-en-placeholder="01XXXXXXXXX" placeholder="01XXXXXXXXX">
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword" data-ar="كلمة المرور" data-en="Password">كلمة المرور</label>
+                    <input type="password" id="registerPassword" data-ar-placeholder="كلمة مرور قوية" data-en-placeholder="Strong password" placeholder="كلمة مرور قوية">
+                </div>
+                <div class="form-group">
+                    <label for="userRole" data-ar="نوع الحساب" data-en="Account Type">نوع الحساب</label>
+                    <select id="userRole" class="form-select">
+                        <option value="client" data-ar="عميل" data-en="Client">عميل</option>
+                        <option value="craftsman" data-ar="حرفي" data-en="Craftsman">حرفي</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary btn-full" id="registerSubmitBtn" onclick="handleRegister()" data-ar="إنشاء حساب" data-en="Create Account">إنشاء حساب</button>
+                <div class="auth-footer">
+                    <p>
+                        <span class="auth-footer-text" data-ar="لديك حساب بالفعل؟" data-en="Already have an account?">لديك حساب بالفعل؟</span>
+                        <a href="#" class="auth-switch" data-target="login" data-ar="سجل الدخول" data-en="Sign In">سجل الدخول</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Craftsman Detail Modal -->
+    <div class="modal" id="craftsmanDetailModal">
+        <div class="modal-content large">
+            <span class="close" id="closeDetailModal">&times;</span>
+            <div id="craftsmanDetailContent">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">Al-Osta</h4>
+                    <p data-ar="منصة رائدة لربط العملاء بالحرفيين الموثوقين في مصر" data-en="Leading platform connecting customers with trusted craftsmen in Egypt">منصة رائدة لربط العملاء بالحرفيين الموثوقين في مصر</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title" data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة</h4>
+                    <a href="#home" data-ar="الرئيسية" data-en="Home">الرئيسية</a>
+                    <a href="#search" data-ar="البحث" data-en="Search">البحث</a>
+                    <a href="#about" data-ar="عن الموقع" data-en="About">عن الموقع</a>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title" data-ar="الدعم" data-en="Support">الدعم</h4>
+                    <a href="#help" data-ar="المساعدة" data-en="Help">المساعدة</a>
+                    <a href="#contact" data-ar="اتصل بنا" data-en="Contact Us">اتصل بنا</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-ar="© 2024 Al-Osta. جميع الحقوق محفوظة" data-en="© 2024 Al-Osta. All rights reserved">© 2024 Al-Osta. جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
